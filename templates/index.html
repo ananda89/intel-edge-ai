@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="rtc.js"></script>
+  <title>JoinPods</title>
+
+  <style>
+    #container {
+      width: 100%;
+      height: 100%;
+    }
+
+    #container #videocontainer {
+      width: 100%;
+      height: 100%;
+    }
+
+    #container #actions {
+      width: 20%;
+      height: 100%;
+      padding: 2%;
+      float: left;
+    }
+
+    canvas {
+      border: 10px black solid;
+      cursor: pointer;
+      z-index: 9;
+      width: 100%;
+      height: 100%;
+    }
+
+    #videoplayer {
+      /* position: absolute; */
+      z-index: 9;
+      background-color: #f1f1f1;
+      border: 1px solid #d3d3d3;
+      text-align: center;
+      width: 75%;
+      height: 100%;
+      float: right;
+    }
+
+    #videoplayerheader {
+      padding: 8px;
+      cursor: move;
+      z-index: 10;
+      background-color: rgb(33, 243, 156);
+      color: rgb(24, 20, 20);
+    }
+
+    th,
+    td {
+      padding: 15px;
+      text-align: left;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid #ddd;
+      border-right: 1px solid #ddd;
+    }
+
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+  </style>
+
+
+</head>
+
+<body>
+
+  <div id="container">
+
+    <div id="actions">
+      <input id="mobileNumber" type="Text" enable value="" />
+      <input id="makeACall" type="button" enable value="Place Call" />
+      <p id="messages">Please enter the mobile number to place the video call</p>
+    </div>
+
+    <!-- Draggable DIV -->
+    <div id="videoplayer">
+      <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
+      <!-- <div id="videoplayerheader">Click here to move</div> -->
+      <div id="videocontainer">
+        <canvas id="canvas" width="532" height="300"></canvas>
+      </div>
+    </div>
+
+
+  </div>
+
+
+
+
+  <script>window.addEventListener("load", pageReady);</script>
+
+</body>
+
+</html>
