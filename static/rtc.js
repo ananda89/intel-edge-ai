@@ -21,17 +21,17 @@ var config = {
 };
 
 
-// var wsc = new WebSocket(config.wssHost),
-//     peerConnCfg = {
-//         "rtcpMuxPolicy": "require", "bundlePolicy": "max-bundle",
-//         iceServers: [{ urls: ["stun:bturn2.xirsys.com"] }, { username: "N560BYAsI-PLjl6Fxxt9gk7PQl_wnzre9D2u5DmRH9gOVia1_ysi0qJevPfMR2iBAAAAAF2v6uttYXl1cmthbm9qaXlh", credential: "7adcc544-f559-11e9-a660-9646de0e6ccd", urls: ["turn:bturn2.xirsys.com:80?transport=udp", "turn:bturn2.xirsys.com:3478?transport=udp", "turn:bturn2.xirsys.com:80?transport=tcp", "turn:bturn2.xirsys.com:3478?transport=tcp", "turns:bturn2.xirsys.com:443?transport=tcp", "turns:bturn2.xirsys.com:5349?transport=tcp"] }]
-//     };
+ var wsc = new WebSocket(config.wssHost),
+     peerConnCfg = {
+         "rtcpMuxPolicy": "require", "bundlePolicy": "max-bundle",
+         iceServers: [{   urls: [ "stun:bturn2.xirsys.com" ]}, {   username: "Fp_0GQLr0lO0i_ohbaOfjwRTiQX8wFcx4_NB-76Z6mnS6TnZUSVz3Wy83rOTr_68AAAAAF2ewvxLTUtuYXRpb24=",   credential: "af49d3ba-eb1f-11e9-9d0c-9646de0e6ccd",   urls: [       "turn:bturn2.xirsys.com:80?transport=udp",       "turn:bturn2.xirsys.com:3478?transport=udp",       "turn:bturn2.xirsys.com:80?transport=tcp",       "turn:bturn2.xirsys.com:3478?transport=tcp",       "turns:bturn2.xirsys.com:443?transport=tcp",       "turns:bturn2.xirsys.com:5349?transport=tcp"   ]}]
+     };
 
-var wsc = new WebSocket(config.wssHost),
-    peerConnCfg = {
-        "rtcpMuxPolicy": "require", "bundlePolicy": "max-bundle",
-        iceServers: [{ urls: ["stun:18.138.121.247:3478"] }, { username: "hb", credential: "hbdev", urls: ["turn:18.138.121.247:3478?transport=udp", "turn:18.138.121.247:3478?transport=tcp", "turns:18.138.121.247:5000?transport=tcp"] }]
-    };
+//var wsc = new WebSocket(config.wssHost),
+//    peerConnCfg = {
+//        "rtcpMuxPolicy": "require", "bundlePolicy": "max-bundle",
+//        iceServers: [{ urls: ["stun:18.138.121.247:3478"] }, { username: "hb", credential: "hbdev", urls: ["turn:18.138.121.247:3478?transport=udp", "turn:18.138.121.247:3478?transport=tcp", "turns:18.138.121.247:5000?transport=tcp"] }]
+//    };
 
 
 
@@ -282,8 +282,9 @@ function initializationMessage(req, resp) {
         wsc.send(JSON.stringify(payload));
         var messageBox = document.getElementById("messages");
         // document.getElementById("myspan").textContent="newtext";
-        messageBox.textContent = 'Please wait while other user clicks this link ' + req.target.baseURI + 'user/' + roomToken;
-        window.roomURL = req.target.baseURI + 'user/' + roomToken;
+        window.roomURL = window.location.origin + '/guest/' + roomToken;
+
+        messageBox.textContent = 'Please wait while other user clicks this link ' + window.roomURL;
         console.log(window.roomURL);
 
         var a = document.createElement('a');
@@ -320,7 +321,7 @@ function guestReady(request, response) {
 
 
     roomToken = request.target.location.pathname;
-    roomToken = roomToken.slice(6);
+    roomToken = roomToken.slice(7);
     console.log(roomToken);
 
     video1 = document.createElement("video", { autoPlay: true }); // create a video element
