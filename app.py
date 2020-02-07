@@ -1,11 +1,10 @@
 # import the Flask class from the flask module
 from flask import Flask, render_template, request, send_from_directory
 import os
-
 current_dir = os.curdir
 # create the application object
 app = Flask(__name__)
-
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/test.db'
 
 @app.route('/<path:path>')
 def send_js(path):
@@ -31,3 +30,4 @@ def callee(roomToken):
 # start the server with the 'run()' method
 if __name__ == '__main__':
     app.run(debug=True)
+

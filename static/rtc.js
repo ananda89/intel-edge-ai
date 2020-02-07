@@ -14,18 +14,20 @@ let remoteAvailable = false, shouldClearCanvas = false, firedOnce = false;
 const guestUserId = 7600006753;
 
 var hbrecorder;
-
+var recordCanvas, rctx;
 var config = {
-    wssHost: 'wss://localhost:8081/'
-    // 18.138.121.247:3478
+    wssHost: 'wss://localhost:8091/',
+    wssUploadHost: 'wss://localhost:8092'
 };
 
 
- var wsc = new WebSocket(config.wssHost),
-     peerConnCfg = {
-         "rtcpMuxPolicy": "require", "bundlePolicy": "max-bundle",
-         iceServers: [{   urls: [ "stun:bturn2.xirsys.com" ]}, {   username: "Fp_0GQLr0lO0i_ohbaOfjwRTiQX8wFcx4_NB-76Z6mnS6TnZUSVz3Wy83rOTr_68AAAAAF2ewvxLTUtuYXRpb24=",   credential: "af49d3ba-eb1f-11e9-9d0c-9646de0e6ccd",   urls: [       "turn:bturn2.xirsys.com:80?transport=udp",       "turn:bturn2.xirsys.com:3478?transport=udp",       "turn:bturn2.xirsys.com:80?transport=tcp",       "turn:bturn2.xirsys.com:3478?transport=tcp",       "turns:bturn2.xirsys.com:443?transport=tcp",       "turns:bturn2.xirsys.com:5349?transport=tcp"   ]}]
-     };
+var wsc = new WebSocket(config.wssHost),
+    peerConnCfg = {
+        "rtcpMuxPolicy": "require", "bundlePolicy": "max-bundle",
+        iceServers: [{ urls: ["stun:bturn2.xirsys.com"] }, { username: "Fp_0GQLr0lO0i_ohbaOfjwRTiQX8wFcx4_NB-76Z6mnS6TnZUSVz3Wy83rOTr_68AAAAAF2ewvxLTUtuYXRpb24=", credential: "af49d3ba-eb1f-11e9-9d0c-9646de0e6ccd", urls: ["turn:bturn2.xirsys.com:80?transport=udp", "turn:bturn2.xirsys.com:3478?transport=udp", "turn:bturn2.xirsys.com:80?transport=tcp", "turn:bturn2.xirsys.com:3478?transport=tcp", "turns:bturn2.xirsys.com:443?transport=tcp", "turns:bturn2.xirsys.com:5349?transport=tcp"] }]
+    };
+
+var wscUpload;
 
 //var wsc = new WebSocket(config.wssHost),
 //    peerConnCfg = {
@@ -155,6 +157,13 @@ function gotStream(stream) {
 
             setTimeout(loop, 1000 / 30); // drawing at 30fps
         })();
+
+        setTimeout(function () {
+            //console.log('Calling clone')
+            lastClone = performance.now();
+            window.requestAnimationFrame(drawClone);
+        }, 1000 / 30);
+
     }, 0);
 
     pcLocal = new RTCPeerConnection(peerConnCfg);
@@ -368,7 +377,7 @@ function guestReady(request, response) {
 
 
 function pageReady(request, response) {
-
+    wscUpload = new WebSocket(config.wssUploadHost);
     video1 = document.createElement("video", { autoPlay: true }); // create a video element
 
     video1.setAttribute("playsinline", null);
@@ -392,6 +401,17 @@ function pageReady(request, response) {
     ctx = canvas.getContext('2d');
 
 
+    recordCanvas = document.createElement('canvas');
+    rctx = recordCanvas.getContext('2d');
+    var canvasRatio = canvas.height / canvas.width;
+    var max_width = 720;
+    var max_height = parseInt(max_width * canvasRatio);
+    //console.log('max_height '+ max_height);
+    recordCanvas.width = max_width;
+    recordCanvas.height = max_height;
+    rctx.canvas.width = max_width;
+    rctx.canvas.height = max_height;
+
     // resize the canvas to fill browser window dynamically
     window.addEventListener('resize', resizeCanvas, false);
 
@@ -401,6 +421,17 @@ function pageReady(request, response) {
         ctx.canvas.width = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
         console.log('Assigned New Heights');
+
+        var canvasRatio = canvas.height / canvas.width;
+        //console.log('max_height '+ canvasRatio);
+
+        var max_width = 720;
+        var max_height = parseInt(max_width * canvasRatio);
+        //console.log('max_height '+ max_height);
+        recordCanvas.width = max_width;
+        recordCanvas.height = max_height;
+        rctx.canvas.width = max_width;
+        rctx.canvas.height = max_height;
         /**
          * Your drawings need to be inside this function otherwise they will be reset when 
          * you resize the browser window and the canvas goes will be cleared.
@@ -537,4 +568,40 @@ function gotDescription1Remote(desc) {
 
 function onCreateSessionDescriptionError(error) {
     console.log(`Failed to create session description: ${error.toString()}`);
+}
+
+
+var time, lastClone;
+var interval = 30;
+function drawClone(time) {
+    if (time - lastClone > interval) {
+        drawCloneStuff();
+        lastClone = time;
+    }
+    window.requestAnimationFrame(drawClone);
+}
+
+function drawCloneStuff() {
+
+    var canvasRatio = canvas.height / canvas.width;
+
+    var max_width = 720;
+    var max_height = parseInt(max_width * canvasRatio);
+    //console.log('max_height '+ max_height);
+    recordCanvas.width = max_width;
+    recordCanvas.height = max_height;
+    rctx.canvas.width = max_width;
+    rctx.canvas.height = max_height;
+
+    var scale = Math.min(
+        recordCanvas.width / canvas.width,
+        recordCanvas.height / canvas.height);
+    var vidH = canvas.height;
+    var vidW = canvas.width;
+    var top = recordCanvas.height / 2 - (vidH / 2) * scale;
+    var left = recordCanvas.width / 2 - (vidW / 2) * scale;
+
+    rctx.save();
+    rctx.drawImage(canvas, left, top, vidW * scale, vidH * scale);
+    rctx.restore();
 }
