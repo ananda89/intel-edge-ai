@@ -3,4 +3,6 @@ venv
 staticfiles
 .env
 db.sqlite3
+signaling/node_modules
+signaling/package.json
 getting-started/*

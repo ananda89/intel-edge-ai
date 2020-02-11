@@ -12,6 +12,7 @@ let mediaStreams = [];
 var deviceIdList = [];
 let remoteAvailable = false, shouldClearCanvas = false, firedOnce = false;
 const guestUserId = 7600006753;
+const API_SERVER = window.location.origin
 
 var hbrecorder;
 var recordCanvas, rctx;
@@ -20,7 +21,6 @@ var config = {
     wssUploadHost: 'wss://localhost:8092'
 };
 
-
 var wsc = new WebSocket(config.wssHost),
     peerConnCfg = {
         "rtcpMuxPolicy": "require", "bundlePolicy": "max-bundle",
@@ -28,14 +28,6 @@ var wsc = new WebSocket(config.wssHost),
     };
 
 var wscUpload;
-
-//var wsc = new WebSocket(config.wssHost),
-//    peerConnCfg = {
-//        "rtcpMuxPolicy": "require", "bundlePolicy": "max-bundle",
-//        iceServers: [{ urls: ["stun:18.138.121.247:3478"] }, { username: "hb", credential: "hbdev", urls: ["turn:18.138.121.247:3478?transport=udp", "turn:18.138.121.247:3478?transport=tcp", "turns:18.138.121.247:5000?transport=tcp"] }]
-//    };
-
-
 
 wsc.addEventListener('open', evt => { keepAlive(); });
 //Keeps socket open
@@ -158,11 +150,13 @@ function gotStream(stream) {
             setTimeout(loop, 1000 / 30); // drawing at 30fps
         })();
 
-        setTimeout(function () {
-            //console.log('Calling clone')
-            lastClone = performance.now();
-            window.requestAnimationFrame(drawClone);
-        }, 1000 / 30);
+        if (wscUpload != undefined) {
+            setTimeout(function () {
+                //console.log('Calling clone')
+                lastClone = performance.now();
+                window.requestAnimationFrame(drawClone);
+            }, 1000 / 30);
+        }
 
     }, 0);
 
@@ -267,6 +261,7 @@ function initializationGuestMessage() {
             "room": roomToken,
             "userId": guestUserId // exper agent number
         }
+        
         wsc.send(JSON.stringify(payload));
         var messageBox = document.getElementById("messages");
         // document.getElementById("myspan").textContent="newtext";
@@ -277,37 +272,77 @@ function initializationGuestMessage() {
 };
 
 
+function initAfterInvite(id) {
+
+    // roomToken = makeid(7); //make calling number incrypted and pass to other user
+    const payload = {
+        "action": "join",
+        "room": roomToken,
+        "userId": 9999999999 // exper agent number
+    }
+    alert(JSON.stringify(payload));
+    wsc.send(JSON.stringify(payload));
+    var messageBox = document.getElementById("messages");
+    // document.getElementById("myspan").textContent="newtext";
+    window.roomURL = window.location.origin + '/guest/' + roomToken + '/' + id;
+
+    messageBox.textContent = 'Please wait while other user clicks this link ' + window.roomURL;
+    console.log(window.roomURL);
+
+    var a = document.createElement('a');
+    a.setAttribute("id", "roomLink");
+    var linkText = document.createTextNode(window.roomURL);
+    a.appendChild(linkText);
+    a.title = window.roomURL;
+    a.href = window.roomURL;
+    document.body.appendChild(a);
+}
+
 function initializationMessage(req, resp) {
 
     // mobileNumber = txtMobileNumber.value
     if (wsc.readyState === wsc.OPEN) {
-        // roomToken = makeid(7); //make calling number incrypted and pass to other user
         roomToken = document.getElementById('mobileNumber').value; //make calling number incrypted and pass to other user
-        const payload = {
-            "action": "join",
-            "room": roomToken,
-            "userId": 9999999999 // exper agent number
-        }
-        wsc.send(JSON.stringify(payload));
-        var messageBox = document.getElementById("messages");
-        // document.getElementById("myspan").textContent="newtext";
-        window.roomURL = window.location.origin + '/guest/' + roomToken;
 
-        messageBox.textContent = 'Please wait while other user clicks this link ' + window.roomURL;
-        console.log(window.roomURL);
-
-        var a = document.createElement('a');
-        a.setAttribute("id", "roomLink");
-        var linkText = document.createTextNode(window.roomURL);
-        a.appendChild(linkText);
-        a.title = window.roomURL;
-        a.href = window.roomURL;
-        document.body.appendChild(a);
+        recordInvite(function (id) {
+            console.log(id);
+            initAfterInvite(id);
+        });
 
     } else {
         console.log("Socket not opened yet")
     }
 };
+
+function callAPI(path, method, data, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.addEventListener("readystatechange", function () {
+        if (this.readyState === 4) {
+            console.log(this.responseText);
+            callback(this.responseText);
+        }
+    });
+
+    xhr.open(method, path);
+    xhr.setRequestHeader("content-type", "application/json");
+    xhr.setRequestHeader("cache-control", "no-cache");
+    xhr.send(data);
+
+}
+
+function recordInvite(callback) {
+    var data = JSON.stringify({
+        "room_token": roomToken,
+        "contact_info": document.getElementById('mobileNumber').value
+    });
+    console.log(data)
+    callAPI(API_SERVER + "/invite", "POST", data, function (response) {
+        const result = JSON.parse(response);
+        callback(result.invite_id);
+    });
+}
 
 
 function guestReady(request, response) {
@@ -329,8 +364,9 @@ function guestReady(request, response) {
     };
 
 
-    roomToken = request.target.location.pathname;
-    roomToken = roomToken.slice(7);
+    // roomToken = request.target.location.pathname;
+    // roomToken = roomToken.slice(7);
+    roomToken = document.getElementById('roomToken').textContent;
     console.log(roomToken);
 
     video1 = document.createElement("video", { autoPlay: true }); // create a video element
@@ -469,7 +505,7 @@ wsc.onmessage = function (evt) {
 
 
 function receiveMessage(message) {
-
+    console.log(message);
     if (message != null) {
         console.log(message);
         if (message.action != null) {
