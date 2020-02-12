@@ -107,7 +107,8 @@ wss.on('connection', function (client, message) {
             var action = data.action;
             // console.log(action + " " + room);
            if (action === 'upload') {
-                var folderId = data.metadata.callLogId + '-' + data.metadata.callLogMediaId;
+//                var folderId = data.metadata.invite_id + '-' + data.metadata.callLogMediaId;
+                var folderId = data.metadata.invite_id;
 
                 var dir = __videofolder + '/' + folderId;
                 if (!fs.existsSync(dir)) {
@@ -128,7 +129,7 @@ wss.on('connection', function (client, message) {
                     // callID = videoDict[room]; metadata
                     myUploader.uploadVideo(folderId + '.' + data.metadata.type, dir + '/' + folderId + '.' + data.metadata.type
                         , dir + '/metadata.json',
-                        data.metadata.callLogId, data.metadata.callLogMediaId);
+                        data.metadata.invite_id, data.metadata.video_id);
                 }
 
             } else {
@@ -157,8 +158,8 @@ wss.on('connection', function (client, message) {
     function writeToDisk(metadata, dataURL) {
 
         var filename = __videofolder + '/'
-            + metadata.callLogId + '-' + metadata.callLogMediaId + '/'
-            + metadata.callLogId + '-' + metadata.callLogMediaId
+            + metadata.invite_id + '/'
+            + metadata.room
             + '.' + metadata.type
 
         try {
