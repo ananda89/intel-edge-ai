@@ -22,12 +22,13 @@ def send_js(path):
 # use decorators to link the function to a url
 @app.route('/')
 def home():
-    return "Hello, World!"  # return a string
+    # return "Hello, World!"  # return a string
+    return render_template('search.html')
 
 
 @app.route('/home')
 def caller():
-    return render_template('index.html')  # render a template
+    return render_template('index.html')
 
 
 @app.route('/guest/<roomToken>/<id>')
@@ -39,6 +40,12 @@ def callee(roomToken, id):
     return render_template('guest.html', roomToken=roomToken)
 
 
+@app.route('/invite/<id>')
+def invite_report(id):
+    detail = {}
+    return render_template('detail.html', id)
+
+
 '''
 API DEVELOPMENT
 '''
@@ -48,7 +55,7 @@ API DEVELOPMENT
 def invite():
     result = manager.insert_invite(request.json)
     if (result.rowcount > 0):
-        return make_response(json.dumps({'success': 1, 'invite_id':result.lastrowid - 1}), 200)
+        return make_response(json.dumps({'success': 1, 'invite_id': result.lastrowid - 1}), 200)
     else:
         return make_response(json.dumps({'success': 0}), 200)
 

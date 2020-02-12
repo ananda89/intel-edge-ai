@@ -8,7 +8,6 @@ CREATE_TABLE_STATEMENT = 'CREATE TABLE invitations(' \
                          'isconnected  BOOLEAN,' \
                          'PRIMARY KEY (invite_id));'
 
-
 class DB:
     '''
     Load and store information for working with the Inference Engine,
@@ -82,4 +81,4 @@ class DB:
 
 # create_table(engine, CREATE_TABLE_STATEMENT)
 # insert_invite(engine,data)
-print(DB().get_invitations())
+# print(DB().get_invitations())
