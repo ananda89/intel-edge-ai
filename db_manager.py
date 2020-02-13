@@ -73,7 +73,8 @@ class DB:
                        "path = '"+data['path']+"'," \
                        "tags = '"+data['tags']+"'" \
                        " WHERE id = " + str(data['id']) + ";"
-        self.execute_query(update_query)
+        rs = self.execute_query(update_query)
+        return rs
 
     def get_videos(self, invite_id=None):
         if invite_id == None:

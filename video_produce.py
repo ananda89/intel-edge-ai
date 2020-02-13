@@ -35,6 +35,7 @@ def compress(videofolder, producedvideofolder, videoname, metadata):
             logging.debug(cmd)
             # saving metadata to check worker to compressing in process or done then upload the video
             save_path = os.path.join(producedvideofolder, 'metadata.json')
+            metadata['infoExtracted'] = 0
             with open(save_path, 'w') as f:
                 metadata['isCompressingDone'] = 0
                 f.write(str(metadata))

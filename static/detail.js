@@ -70,6 +70,7 @@ function updateTime() {
     if (sec.toString().length < 2) sec = "0" + sec;
     if (min.toString().length < 2) min = "0" + min;
     // document.getElementById('lblTime').innerHTML = h + ":" + min + ":" + sec;
+    console.log(h + ":" + min + ":" + sec);
 
     seekbar.min = minVideo.startTime;
     seekbar.max = minVideo.duration;
