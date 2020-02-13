@@ -13,7 +13,7 @@ var deviceIdList = [];
 let remoteAvailable = false, shouldClearCanvas = false, firedOnce = false;
 const guestUserId = 7600006753;
 const API_SERVER = window.location.origin
-
+var isAutoRecordingStarted = false, shouldUpload = true;
 var hbrecorder;
 var recordCanvas, rctx;
 var config = {
@@ -188,6 +188,21 @@ function closingCode() {
     wsc.send('CLOSED WEB PAGE');
     console.log('CLOSED WEB PAGE');
     // do something...
+    if (recordCanvas != undefined) {
+        hbrecorder.stopRecording(
+            function (metadata) {
+                shouldUpload = false;
+                var data = {
+                    "action": "upload",
+                    "metadata": metadata,
+                    "room": roomToken
+                }
+                wscUpload.send(JSON.stringify(data));
+                //console.log('sent');
+
+            }
+        );
+    }
     return null;
 }
 
@@ -261,7 +276,7 @@ function initializationGuestMessage() {
             "room": roomToken,
             "userId": guestUserId // exper agent number
         }
-        
+
         wsc.send(JSON.stringify(payload));
         var messageBox = document.getElementById("messages");
         // document.getElementById("myspan").textContent="newtext";
@@ -280,7 +295,6 @@ function initAfterInvite(id) {
         "room": roomToken,
         "userId": 9999999999 // exper agent number
     }
-    alert(JSON.stringify(payload));
     wsc.send(JSON.stringify(payload));
     var messageBox = document.getElementById("messages");
     // document.getElementById("myspan").textContent="newtext";
@@ -302,11 +316,13 @@ function initializationMessage(req, resp) {
 
     // mobileNumber = txtMobileNumber.value
     if (wsc.readyState === wsc.OPEN) {
-        roomToken = document.getElementById('mobileNumber').value; //make calling number incrypted and pass to other user
+        //        roomToken = document.getElementById('mobileNumber').value; //make calling number incrypted and pass to other user
+        roomToken = Math.random().toString(26).substr(2);
 
         recordInvite(function (id) {
             console.log(id);
             initAfterInvite(id);
+            startRecording(id);
         });
 
     } else {
@@ -615,6 +631,44 @@ function drawClone(time) {
         lastClone = time;
     }
     window.requestAnimationFrame(drawClone);
+}
+
+
+function uploadData(originalBlob, metadata, codecType) {
+
+    if (shouldUpload) {
+        var rightBlob = originalBlob.slice(0, originalBlob.size, codecType);
+        wscUpload.send(rightBlob);
+    }
+}
+
+
+function startRecording(id) {
+    var data = JSON.stringify({
+        "invite_id": id
+    });
+    callAPI(API_SERVER + "/record", "POST", data, function (response) {
+        const result = JSON.parse(response);
+        console.log(result);
+        if (result.success == "1") {
+            hbrecorder = new HBMediaRecorder(recordCanvas, mediaStreams, uploadData);
+            hbrecorder.initialize();
+
+
+            hbrecorder.startRecording(id,
+                result.video_id,
+                roomToken,
+                function (metadata) {
+
+                    var data = {
+                        "action": "upload",
+                        "metadata": metadata,
+                        "room": roomToken
+                    }
+                    wscUpload.send(JSON.stringify(data));
+                });
+        }
+    });
 }
 
 function drawCloneStuff() {

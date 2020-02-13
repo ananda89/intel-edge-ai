@@ -8,6 +8,15 @@ CREATE_TABLE_STATEMENT = 'CREATE TABLE invitations(' \
                          'isconnected  BOOLEAN,' \
                          'PRIMARY KEY (invite_id));'
 
+CREATE_VIDEOS_TABLE_STATEMENT = 'CREATE TABLE videos(' \
+                                'id   INT  NOT NULL,' \
+                                'invite_id   INT  NOT NULL,' \
+                                'path VARCHAR (60),' \
+                                'status INT NOT NULL,' \
+                                'tags  VARCHAR (200),' \
+                                'PRIMARY KEY (id));'
+
+
 class DB:
     '''
     Load and store information for working with the Inference Engine,
@@ -49,6 +58,29 @@ class DB:
             rs = con.execute(query)
             return rs
 
+    # 0-> pending and 1 for completed and 2 for ai generated
+    def insert_video(self, data):
+        resultDf = self.get_data('SELECT * FROM videos')
+        inset_query = "INSERT INTO videos (id, invite_id, status) " \
+                      "VALUES ('" + str(len(resultDf)) + "', '" + str(data['invite_id']) + "', 0);"
+        print(inset_query)
+        rs = self.execute_query(inset_query)
+        return rs
+
+    def update_video(self, data):
+        update_query = "UPDATE videos SET " \
+                       "status = '"+str(data['status'])+"'," \
+                       "path = '"+data['path']+"'," \
+                       "tags = '"+data['tags']+"'" \
+                       " WHERE id = " + str(data['id']) + ";"
+        self.execute_query(update_query)
+
+    def get_videos(self, invite_id=None):
+        if invite_id == None:
+            return self.get_data('SELECT * FROM videos')
+        else:
+            return self.get_data('SELECT * FROM videos WHERE invite_id=' + str(invite_id))
+
     def insert_invite(self, data):
         if not 'invite_id' in data.keys():
             resultDf = self.get_data('SELECT * FROM invitations')
@@ -79,6 +111,8 @@ class DB:
 #     'contact_info':'mayur@maili.com'
 # }
 
-# create_table(engine, CREATE_TABLE_STATEMENT)
+
+# DB().create_table(CREATE_TABLE_STATEMENT)
+# DB().create_table(CREATE_VIDEOS_TABLE_STATEMENT)
 # insert_invite(engine,data)
 # print(DB().get_invitations())

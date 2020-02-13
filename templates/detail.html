@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="/detail.js"></script>
+  <title>Video Detail</title>
+
+  <style>
+    body {
+      width: 99%;
+      height: 100%;
+    }
+
+    #header {
+      height: 5%;
+    }
+
+    #container {
+      height: 70%;
+    }
+
+    #container #video-box {
+      float: left;
+      margin: 1%;
+      width: 60%;
+      text-align: center;
+
+    }
+
+
+    #container #video-data {
+      margin: 1%;
+      float: left;
+      text-align: left;
+    }
+
+    #video-data #status-box #status-title {
+      float: left;
+      margin: 0.2em;
+      font-family: Courier New, Courier, monospace;
+    }
+
+    #video-data #status-box #status-content {
+      float: left;
+      margin: 0.2em;
+      font-family: Courier New, Courier, monospace;
+    }
+  </style>
+
+
+</head>
+
+<body>
+
+  <div id="header">
+    <p id="data" style="display:none">{{ data }}</p>
+  </div>
+  <div id="container">
+
+    <div id="video-box">
+      <canvas id="canvas" width="720" height="480"></canvas>
+      <!-- <input class="seekbar" type="range"></input> -->
+    </div>
+
+    <div id="video-data">
+      <div id="status-box">
+        <p id="status-title">STATUS: </p>
+        <p id="status-content">NA</p>
+      </div>
+
+    </div>
+  </div>
+  <script>window.addEventListener("load", pageReady);</script>
+</body>
+
+</html>

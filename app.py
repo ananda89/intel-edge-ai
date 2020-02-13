@@ -4,7 +4,7 @@ import os
 import db_manager
 import json
 from db_manager import DB
-
+import config
 current_dir = os.curdir
 # create the application object
 app = Flask(__name__)
@@ -17,6 +17,12 @@ global manager
 @app.route('/<path:path>')
 def send_js(path):
     return send_from_directory('static', path)
+
+
+@app.route('/signaling/produce/<video_folder>/<filename>')
+def send_video(video_folder, filename):
+    folderpath = os.path.join(config.produced_data_dir, video_folder)
+    return send_from_directory(folderpath, filename)
 
 
 # use decorators to link the function to a url
@@ -42,8 +48,16 @@ def callee(roomToken, id):
 
 @app.route('/invite/<id>')
 def invite_report(id):
-    detail = {}
-    return render_template('detail.html', id)
+    resultDf = manager.get_videos(id)
+    data = []
+    for index, row in resultDf.iterrows():
+        data.append(dict(row))
+
+    if len(data) > 0:
+        return render_template('detail.html', data=json.dumps(data))
+    else:
+        return render_template('no_data_found.html')
+
 
 
 '''
@@ -56,6 +70,15 @@ def invite():
     result = manager.insert_invite(request.json)
     if (result.rowcount > 0):
         return make_response(json.dumps({'success': 1, 'invite_id': result.lastrowid - 1}), 200)
+    else:
+        return make_response(json.dumps({'success': 0}), 200)
+
+
+@app.route('/record', methods=['POST'])
+def record():
+    result = manager.insert_video(request.json)
+    if (result.rowcount > 0):
+        return make_response(json.dumps({'success': 1, 'video_id': result.lastrowid - 1}), 200)
     else:
         return make_response(json.dumps({'success': 0}), 200)
 

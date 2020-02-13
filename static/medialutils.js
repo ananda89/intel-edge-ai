@@ -19,14 +19,10 @@ class HBMediaRecorder {
         this.UPLOAD_API = '';
 
         this.VIDEO_NAME = 'test';
-        this.expertId = '';
         this.isUploading = false;
-        this.media_id;
-        this.api_path;
-        this.bucket;
-        this.access_key;
-        this.secret_key;
-        this.call_log_id;
+        this.invite_id;
+        this.video_id;
+        this.roomToken;
     }
 
 
@@ -88,21 +84,7 @@ class HBMediaRecorder {
     }
 
     //Extra Utilities
-    startRecording(expertId, 
-                    media_id, 
-                     api_path,
-                      bucket,
-                       access_key,
-                        secret_key,
-                         call_log_id,
-                          roomToken,
-                           csd_media_upload_to,
-                            csd_sftp_host,
-                             csd_sftp_port,
-                              csd_sftp_login,
-                               csd_sftp_password,
-                                csd_sftp_folder_name,
-                                 callback) {
+    startRecording(invite_id, video_id, roomToken, callback) {
 
         var extType = 'mp4';
         if (typeof MediaRecorder.isTypeSupported == 'function') {
@@ -110,22 +92,12 @@ class HBMediaRecorder {
         }
         var metadata = {
             "type": extType,
-            "callLogMediaId": media_id,
+            "invite_id": invite_id,
             "room": roomToken,
             "isRecordingStopped": 0,
             "isCompressingStarted": 0,
-            "callLogId": call_log_id,
-            "api_path":api_path,
-            "bucket":bucket,
-            "access_key": access_key,
-            "secret_key": secret_key,
-            "isSocketUploading": 0,
-            "csd_media_upload_to" : csd_media_upload_to,
-            "csd_sftp_host": csd_sftp_host,
-            "csd_sftp_port":csd_sftp_port,
-            "csd_sftp_login":csd_sftp_login,
-            "csd_sftp_password":csd_sftp_password,
-            "csd_sftp_folder_name" : csd_sftp_folder_name
+            "video_id": video_id,
+            "isSocketUploading": 0
         }
         //console.log(metadata);
         callback(metadata);
@@ -133,20 +105,9 @@ class HBMediaRecorder {
         this.recordedBlobs = [];
         log('Start recording...');
         this.VIDEO_NAME = new Date().toJSON();
-        this.expertId = expertId;
-        this.media_id = media_id;
-        this.api_path = api_path;
-        this.bucket = bucket;
-        this.access_key = access_key;
-        this.secret_key = secret_key;
-        this.call_log_id = call_log_id;
+        this.invite_id = invite_id;
+        this.video_id = video_id;
         this.roomToken = roomToken;
-        this.csd_media_upload_to = csd_media_upload_to;
-        this.csd_sftp_host = csd_sftp_host;
-        this.csd_sftp_port = csd_sftp_port;
-        this.csd_sftp_login = csd_sftp_login;
-        this.csd_sftp_password = csd_sftp_password;
-        this.csd_sftp_folder_name = csd_sftp_folder_name;
 
         if (typeof MediaRecorder.isTypeSupported == 'function') {
             this.mediaRecorder.start(50); // collect 10ms of data   
@@ -215,22 +176,12 @@ class HBMediaRecorder {
         }
         var metadata = {
             "type": extType,
-            "callLogMediaId": this.media_id,
+            "invite_id": this.invite_id,
             "room": this.roomToken,
             "isRecordingStopped": 1,
             "isCompressingStarted": 0,
-            "callLogId": this.call_log_id,
-            "api_path":this.api_path,
-            "bucket":this.bucket,
-            "access_key": this.access_key,
-            "secret_key": this.secret_key,
-            "isSocketUploading": 0,
-            "csd_media_upload_to" : this.csd_media_upload_to,
-            "csd_sftp_host": this.csd_sftp_host,
-            "csd_sftp_port": this.csd_sftp_port,
-            "csd_sftp_login": this.csd_sftp_login,
-            "csd_sftp_password": this.csd_sftp_password,
-            "csd_sftp_folder_name" : this.csd_sftp_folder_name
+            "video_id": this.video_id,
+            "isSocketUploading": 0
         }
         callback(metadata);
     }
@@ -244,24 +195,12 @@ class HBMediaRecorder {
         }
         var metadata = {
             "type": extType,
-            "callLogMediaId": this.media_id,
+            "invite_id": this.invite_id,
             "room": this.roomToken,
             "isRecordingStopped": 0,
             "isCompressingStarted": 0,
-            "callLogId": this.call_log_id,
-            "api_path":this.api_path,
-            "bucket":this.bucket,
-            "access_key": this.access_key,
-            "secret_key": this.secret_key,
-            "isSocketUploading": 0,
-            "csd_media_upload_to" : this.csd_media_upload_to,
-            "csd_sftp_host": this.csd_sftp_host,
-            "csd_sftp_port": this.csd_sftp_port,
-            "csd_sftp_login": this.csd_sftp_login,
-            "csd_sftp_password": this.csd_sftp_password,
-            "csd_sftp_folder_name" : this.csd_sftp_folder_name
-
-
+            "video_id": this.video_id,
+            "isSocketUploading": 0
         }
         //console.log(metadata);
         this.uploadCallBack(blob, metadata, codecType);
