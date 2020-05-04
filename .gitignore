@@ -5,4 +5,8 @@ staticfiles
 db.sqlite3
 signaling/node_modules
 signaling/package.json
+signaling/produce/*
+signaling/videos/*
+intel/out.avi
+intel/pre-trained-models/*
 getting-started/*

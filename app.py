@@ -83,6 +83,36 @@ def record():
         return make_response(json.dumps({'success': 0}), 200)
 
 
+@app.route('/search', methods=['POST'])
+def get_invite_search():
+    try:
+        data = request.get_json()
+        tags = data['tags']
+        resultDf = manager.get_searched_invitation(str(tags))
+    except Exception as err:
+        resultDf = manager.get_invitations()
+
+    data = []
+    for index, rows in resultDf.iterrows():
+        print(rows)
+        data.append({
+            'id': list(rows['invite_id'])[0],
+            'room_token': rows['room_token'],
+            'contact_info': rows['contact_info'],
+            'isconnected': rows['isconnected']
+        })
+
+    result = {
+        'data': data
+    }
+    if len(data) > 0:
+        result['success'] = 1
+    else:
+        result['success'] = 0
+
+    return make_response(json.dumps(result), 200)
+
+
 @app.route('/get_invites', methods=['GET'])
 def get_invite():
     try:

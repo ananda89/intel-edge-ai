@@ -107,6 +107,9 @@ class DB:
         else:
             return self.get_data('SELECT * FROM invitations WHERE invite_id=' + str(id))
 
+    def get_searched_invitation(self, tags):
+        return self.get_data("SELECT * FROM invitations LEFT JOIN videos ON invitations.invite_id = videos.invite_id where (',' || tags || ',') LIKE '%"+tags+"%'")
+
 # data = {
 #     'room_token':'213123ccsd',
 #     'contact_info':'mayur@maili.com'
@@ -116,4 +119,7 @@ class DB:
 # DB().create_table(CREATE_TABLE_STATEMENT)
 # DB().create_table(CREATE_VIDEOS_TABLE_STATEMENT)
 # insert_invite(engine,data)
-# print(DB().get_invitations())
+# print(DB().get_data('SELECT * FROM invitations LEFT JOIN videos ON invitations.invite_id = videos.invite_id'))
+# DB().execute_query('UPDATE videos SET status = "2" WHERE id = "0"')
+# print(DB().get_searched_invitation('tie'))
+

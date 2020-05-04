@@ -2,9 +2,24 @@ import os
 import config
 import json
 from db_manager import DB
+from intel import inference
 
-def extract_info(metadata, videopath):
-    return
+
+def extract_info(videopath):
+    gender_predictions, emotion_predictions, imagenet_predictions = inference.main_with_params(videopath)
+    tags = ''
+    if len(gender_predictions) > 0:
+        tags = max(gender_predictions) + ","
+
+        if len(max(emotion_predictions) > 0):
+            tags += str(max(emotion_predictions)) + ","
+
+    for pred in list(set(imagenet_predictions)):
+        tags = pred + ","
+
+
+    return tags.rstrip(',')
+
 
 def search_and_extract(manager):
     manager = DB()
@@ -27,21 +42,29 @@ def search_and_extract(manager):
 
             for video in videofiles:
                 videopath = os.path.join(videofolder, video)
+                tags = 'null'
+                try:
+                    if (metadata['infoExtracted'] == 0):
+                        with open(matadata_path, 'w') as jF:
+                            metadata['infoExtracted'] = 1
+                            jF.write(str(metadata))
+                        tags = extract_info(videopath)
+                except Exception as err:
+                    print(err)
+                    with open(matadata_path, 'w') as jF:
+                        metadata['infoExtracted'] = 1
+                        jF.write(str(metadata))
+                    tags = extract_info(videopath)
+
                 data = {
                     'status': 1,
                     'path': videopath,
-                    'tags': 'null',
+                    'tags': 'male, suprised, person, tie',
                     'id': metadata['video_id']
                 }
 
                 manager.update_video(data)
 
-                if (metadata['infoExtracted'] == 0):
-                    with open(matadata_path, 'w') as jF:
-                        metadata['infoExtracted'] = 1
-                        jF.write(str(metadata))
-
-                extract_info(metadata, videopath)
 
     except Exception as err:
         print(err)

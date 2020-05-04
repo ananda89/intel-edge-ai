@@ -444,11 +444,32 @@ function pageReady(request, response) {
     remoteVideo.setAttribute("autoPlay", true);
 
     makeCallButton = document.getElementById("makeACall");
+    stopCallButton = document.getElementById("stopACall");
+    
     recordButton = document.getElementById("record");
     muteButton = document.getElementById("btnMute");
     reqLocButton = document.getElementById("reqLocation");
 
     makeCallButton.onclick = initializationMessage;
+    stopCallButton.onclick = function(){
+        if (recordCanvas != undefined) {
+            hbrecorder.stopRecording(
+                function (metadata) {
+                    shouldUpload = false;
+                    var data = {
+                        "action": "upload",
+                        "metadata": metadata,
+                        "room": roomToken
+                    }
+                    wscUpload.send(JSON.stringify(data));
+                    //console.log('sent');
+    
+                }
+            );
+            recordCanvas = undefined;
+        }
+    };
+
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
 

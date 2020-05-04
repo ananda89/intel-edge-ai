@@ -56,6 +56,24 @@
       padding: 1%;
       margin: 1%;
     }
+
+    .btn {
+      border: none;
+      background-color: inherit;
+      padding: 14px 28px;
+      font-size: 16px;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    /* On mouse-over */
+    .btn:hover {
+      background: #eee;
+    }
+
+    .call {
+      color: dodgerblue;
+    }
   </style>
 
 
@@ -63,12 +81,11 @@
 
 <body>
 
-
+  <button class="btn call" style="position: absolute;" onclick="location.href=window.origin+'/home';" >Make Call</button>
 
   <div id="header">
     <!--<img src="https://now.tethrit.com/public/upload/settings_files/logo-20191118095910994070.png" style="margin:auto;  display:block; padding:2%"></img>-->
-    <img src="udacity.png"
-         style="margin:auto;  display:block; padding:2%"/>
+    <img src="logo.png" style="margin:auto;  display:block; padding:2%" />
   </div>
 
   <div id="container">
