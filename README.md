@@ -43,10 +43,14 @@ Step 9: Run Video Uploading Server throw following commands in new terminal
         cd signaling
         node video_server.js
 
-Step 10: Run app.py (This is main driver file for web)
+Step 10: Bypass SSL error by accepting invalid certificate. Click on following link and acccept.
+
+        https://localhost:8091/
+
+Step 11: Run app.py (This is main driver file for web)
         
         python app.py
 
-Step 11: Run produce_ai_service.py after each video call which is main driver file to extract tags from videos and inserts into database.
+Step 12: Run produce_ai_service.py after each video call which is main driver file to extract tags from videos and inserts into database.
 
         python produce_ai_service.py 

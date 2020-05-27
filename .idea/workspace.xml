@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7f6d56a4-f103-44b1-8d39-64d6db8b4288" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/signaling/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/signaling/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/rtc.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/rtc.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,23 +21,6 @@
         <option value="Python Script" />
       </list>
     </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>call</find>
-      <find>initializationMessage</find>
-      <find>guestReady</find>
-      <find>pager</find>
-      <find>drawCloneStuff</find>
-      <find>get_data</find>
-      <find>roomtoken =</find>
-      <find>+, TAG)</find>
-      <find>, TAG)</find>
-      <find>config.log_update_summary</find>
-    </findStrings>
-    <replaceStrings>
-      <replace>logging.debug</replace>
-    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -59,17 +45,17 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/models" />
-      <recent name="$PROJECT_DIR$/intel" />
-      <recent name="$PROJECT_DIR$/templates" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/db" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/intel" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/signaling/videos" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/signaling" />
+      <recent name="$PROJECT_DIR$/models" />
+      <recent name="$PROJECT_DIR$/intel" />
+      <recent name="$PROJECT_DIR$/templates" />
+      <recent name="$PROJECT_DIR$" />
     </key>
   </component>
   <component name="RunManager" selected="Python.app">
@@ -209,22 +195,26 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1832" height="350" key="GridCell.Tab.0.bottom" timestamp="1590574858008">
+    <state x="780" y="297" key="FileChooserDialogImpl" timestamp="1590576217063">
       <screen x="65" y="24" width="1855" height="1056" />
     </state>
-    <state width="1832" height="350" key="GridCell.Tab.0.bottom/65.24.1855.1056@65.24.1855.1056" timestamp="1590574858008" />
-    <state width="1832" height="350" key="GridCell.Tab.0.center" timestamp="1590574858008">
+    <state x="780" y="297" key="FileChooserDialogImpl/65.24.1855.1056@65.24.1855.1056" timestamp="1590576217063" />
+    <state width="1832" height="350" key="GridCell.Tab.0.bottom" timestamp="1590576634572">
       <screen x="65" y="24" width="1855" height="1056" />
     </state>
-    <state width="1832" height="350" key="GridCell.Tab.0.center/65.24.1855.1056@65.24.1855.1056" timestamp="1590574858008" />
-    <state width="1832" height="350" key="GridCell.Tab.0.left" timestamp="1590574858007">
+    <state width="1832" height="350" key="GridCell.Tab.0.bottom/65.24.1855.1056@65.24.1855.1056" timestamp="1590576634572" />
+    <state width="1832" height="350" key="GridCell.Tab.0.center" timestamp="1590576634569">
       <screen x="65" y="24" width="1855" height="1056" />
     </state>
-    <state width="1832" height="350" key="GridCell.Tab.0.left/65.24.1855.1056@65.24.1855.1056" timestamp="1590574858007" />
-    <state width="1832" height="350" key="GridCell.Tab.0.right" timestamp="1590574858008">
+    <state width="1832" height="350" key="GridCell.Tab.0.center/65.24.1855.1056@65.24.1855.1056" timestamp="1590576634569" />
+    <state width="1832" height="350" key="GridCell.Tab.0.left" timestamp="1590576634569">
       <screen x="65" y="24" width="1855" height="1056" />
     </state>
-    <state width="1832" height="350" key="GridCell.Tab.0.right/65.24.1855.1056@65.24.1855.1056" timestamp="1590574858008" />
+    <state width="1832" height="350" key="GridCell.Tab.0.left/65.24.1855.1056@65.24.1855.1056" timestamp="1590576634569" />
+    <state width="1832" height="350" key="GridCell.Tab.0.right" timestamp="1590576634571">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state width="1832" height="350" key="GridCell.Tab.0.right/65.24.1855.1056@65.24.1855.1056" timestamp="1590576634571" />
     <state x="486" y="174" key="SettingsEditor" timestamp="1590574845862">
       <screen x="65" y="24" width="1855" height="1056" />
     </state>

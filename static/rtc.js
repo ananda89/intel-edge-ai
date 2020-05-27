@@ -5,7 +5,7 @@
 //For Ice servers
 // turnserver -a -o -v -n -u user:root -p 3478 -L 172.31.37.43 -r someRealm -X 18.212.121.171/172.31.37.43 --no-dtls --no-tls
 
-let video1, remoteVideo, makeCallButton, muteVideoButton, roomToken, reqLocButton, muteButton, recordButton, canvas, ctx;
+let video1, remoteVideo, makeCallButton, muteVideoButton, roomToken, reqLocButton, muteButton, recordButton, canvas, ctx, stopCallButton;
 let pcLocal;
 let recordedBlobs, mediaRecorder, remoteStream, videoOnlyStream, fullStream;
 let mediaStreams = [];
