@@ -1,6 +1,8 @@
 venv
 *.pyc
 staticfiles
+.idea
+.idea/*
 .env
 db.sqlite3
 signaling/node_modules
