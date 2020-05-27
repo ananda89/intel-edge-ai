@@ -8,7 +8,7 @@ Step 2: Install OpenVino ToolKit
 
         https://software.intel.com/content/www/us/en/develop/tools/openvino-toolkit/choose-download.html
             
-Step 3: Download the pretrained models from following link and place it under intel/ folder
+Step 3: Check intel/pre-trained-models/ folder. If not exists then download pretrained models from following link and place it under intel/ folder
 
         https://www.dropbox.com/sh/mfng3vj2r1yutzo/AABLc3wFhhwYqEjtV8v5Dvsja?dl=0
         
