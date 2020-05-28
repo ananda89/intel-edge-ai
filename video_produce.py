@@ -97,7 +97,8 @@ def search_and_compress():
                 s = s.replace("'", '"')
                 metadata = json.loads(s)
 
-            if (bool(int(metadata['isRecordingStopped']))):
+            # if (bool(int(metadata['isRecordingStopped']))):
+            if (int(metadata['isRecordingStopped']) == 0):
                 if (int(metadata['isCompressingStarted']) == 0):
                     # compress(videofolder, producedvideofolder, videoname, metadata)
                     multithreads.append(
