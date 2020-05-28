@@ -46,7 +46,7 @@ module.exports = {
         };
 
         request(options, function (error, response, body) {
-            if (error) throw new Error(error);
+            if (error) return;
 
             console.log(response.statusCode);
             console.log(body);
