@@ -59,7 +59,7 @@ def search_and_extract(manager):
                 data = {
                     'status': 1,
                     'path': videopath,
-                    'tags': 'male, suprised, person, tie',
+                    'tags': tags, #'male, person'
                     'id': metadata['video_id']
                 }
 
