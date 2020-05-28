@@ -1,16 +1,5 @@
-var keypath = '/etc/nginx/ssl/tethrlite.key'; //live
-var certpath = '/etc/nginx/ssl/tethrlitelive.crt'; //live
-
-if(__dirname==='/var/www/html/Signaling'){
-    // var keypath = '/var/www/html/Signaling/ssl/key.pem'; //pp
-    // var certpath = '/var/www/html/Signaling/ssl/cert.pem'; //pp
-
-    var keypath = '/var/www/html/Signaling/ssl/phase_2_key.key'; //pp
-    var certpath = '/var/www/html/Signaling/ssl/phase_2_cert.pem'; //pp
-}
-
-var keypath = '/var/www/html/tethr_lite_video_streaming_platform_004475/Signaling/ssl/key.pem'; //local
-var certpath = '/var/www/html/tethr_lite_video_streaming_platform_004475/Signaling/ssl/cert.pem'; //local
+var keypath = 'key.pem'; //local
+var certpath = 'cert.pem'; //local
 
 var port = 8091;
 
