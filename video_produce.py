@@ -9,6 +9,8 @@ import gc
 import logging
 
 # Create a custom logger
+from db_manager import DB
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename='video_produce.log', filemode='w', format='%(asctime)s - %(message)s')
 # ffmpeg -i <inputfilename> -s 640x480 -b:v 512k -vcodec mpeg1video -acodec copy <outputfilename>
@@ -17,11 +19,11 @@ logging.basicConfig(filename='video_produce.log', filemode='w', format='%(asctim
 from threads import CompressVideoThread
 
 
-
 def compress(videofolder, producedvideofolder, videoname, metadata):
     try:
         logging.debug('Compressing Started => ' + videoname)
         save_path = os.path.join(producedvideofolder, secure_filename(videoname + '.mp4'))
+        mSave_path = save_path
         chunks = sorted(os.listdir(videofolder))
         for video in chunks:
             if video.__contains__('.json'):
@@ -40,7 +42,16 @@ def compress(videofolder, producedvideofolder, videoname, metadata):
                 metadata['isCompressingDone'] = 0
                 f.write(str(metadata))
 
+            manager = DB()
             if os.system(cmd) == 0:  # success
+                data = {
+                    'status': 1,
+                    'path': mSave_path,
+                    'tags': "null",  # 'male, person'
+                    'id': metadata['video_id']
+                }
+                manager.update_video(data)
+
                 with open(save_path, 'w') as f:
                     metadata['isCompressingDone'] = 1
                     f.write(str(metadata))
@@ -49,6 +60,13 @@ def compress(videofolder, producedvideofolder, videoname, metadata):
                 logging.debug('Compressing Complete => ' + producedvideofolder)
                 # upload(producedvideofolder, bucket, producedvideofolder.replace(config.produced_data_dir, ''))
             else:
+                data = {
+                    'status': 1,
+                    'path': os.path.join(videofolder, video),
+                    'tags': "null",  # 'male, person'
+                    'id': metadata['video_id']
+                }
+                manager.update_video(data)
                 logging.debug('Error in ffmpeg compressing so uploading raw video ' + videofolder)
                 # upload(videofolder, bucket, videofolder.replace(config.data_dir, ''))
                 with open(save_path, 'w') as f:
@@ -56,7 +74,6 @@ def compress(videofolder, producedvideofolder, videoname, metadata):
                     f.write(str(metadata))
     except Exception as err:
         logging.debug(err)
-
 
 
 def execute_all_threads(multithreads):
@@ -98,7 +115,7 @@ def search_and_compress():
                 metadata = json.loads(s)
 
             # if (bool(int(metadata['isRecordingStopped']))):
-            if (int(metadata['isRecordingStopped']) == 0):
+            if (int(metadata['isRecordingStopped']) == 0 or int(metadata['isRecordingStopped']) == 1):
                 if (int(metadata['isCompressingStarted']) == 0):
                     # compress(videofolder, producedvideofolder, videoname, metadata)
                     multithreads.append(
@@ -141,7 +158,6 @@ def search_and_compress():
 
     except Exception as err:
         logging.debug(err)
-
 
 # search_and_compress()
 # compress('/home/hb/demos/MediaUploadPy/produce/32a', '/home/hb/demos/MediaUploadPy/produce/', 'videoname', None)
