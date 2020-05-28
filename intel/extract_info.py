@@ -11,11 +11,11 @@ def extract_info(videopath):
     if len(gender_predictions) > 0:
         tags = max(gender_predictions) + ","
 
-        if len(max(emotion_predictions) > 0):
+        if len(emotion_predictions) > 0:
             tags += str(max(emotion_predictions)) + ","
 
     for pred in list(set(imagenet_predictions)):
-        tags = pred + ","
+        tags += pred + ","
 
 
     return tags.rstrip(',')
@@ -44,11 +44,12 @@ def search_and_extract(manager):
                 videopath = os.path.join(videofolder, video)
                 tags = 'null'
                 try:
-                    if (metadata['infoExtracted'] == 0):
+                    if (int(metadata['infoExtracted']) == 0):
+                        tags = extract_info(videopath)
                         with open(matadata_path, 'w') as jF:
                             metadata['infoExtracted'] = 1
                             jF.write(str(metadata))
-                        tags = extract_info(videopath)
+
                 except Exception as err:
                     print(err)
                     with open(matadata_path, 'w') as jF:

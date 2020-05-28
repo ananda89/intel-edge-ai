@@ -70,7 +70,7 @@ def extract_on_video(args):
 
     # Define the codec and create VideoWriter object
     cap = cv2.VideoCapture(args.i)
-    fps = FPS().start()
+    # fps = FPS().start()
 
     imagenet_predictions = []
     emotion_predictions = []
@@ -170,16 +170,16 @@ def extract_on_video(args):
 
                 yolo_utils.detect_classes(layerOutputs, callback, (720, 1280))
 
-            fps.update()
+            # fps.update()
 
 
         except Exception as err:
             print(err)
 
     # stop the timer and display FPS information
-    fps.stop()
-    print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
-    print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
+    # fps.stop()
+    # print("[INFO] elasped time: {:.2f}".format(fps.elapsed()))
+    # print("[INFO] approx. FPS: {:.2f}".format(fps.fps()))
 
     ### TODO: Close the stream and any windows at the end of the application
     # When everything done, release the capture
