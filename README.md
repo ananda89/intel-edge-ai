@@ -4,9 +4,11 @@ Step 1: Create Virtual Enviorment
 
         python3 -m venv venv
 
-Step 2: Install OpenVino ToolKit
+Step 2: Install OpenVino ToolKit, FFMPEG & NODE 12+ and NPM
 
         https://software.intel.com/content/www/us/en/develop/tools/openvino-toolkit/choose-download.html
+        https://www.ffmpeg.org/download.html
+        https://websiteforstudents.com/how-to-install-node-js-10-11-12-on-ubuntu-16-04-18-04-via-apt-and-snap/
             
 Step 3: Check intel/pre-trained-models/ folder. If not exists then download pretrained models from following link and place it under intel/ folder
 
@@ -50,7 +52,11 @@ Step 10: Bypass SSL error by accepting invalid certificate. Click on following l
 Step 11: Run app.py (This is main driver file for web)
         
         python app.py
+        
+Step 12: Run produce_service.py (This script compress the video file through ffmpeg)
+        
+        python produce_service.py
 
-Step 12: Run produce_ai_service.py after each video call which is main driver file to extract tags from videos and inserts into database.
+Step 13: Run produce_ai_service.py after each video call which is main driver file to extract tags from videos and inserts into database.
 
         python produce_ai_service.py 
