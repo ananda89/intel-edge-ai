@@ -166,10 +166,10 @@
     </configuration>
     <list>
       <item itemvalue="Python.app" />
-      <item itemvalue="Python.produce_service" />
       <item itemvalue="Python.extract_info" />
-      <item itemvalue="Python.produce_ai_service" />
       <item itemvalue="Python.inference" />
+      <item itemvalue="Python.produce_ai_service" />
+      <item itemvalue="Python.produce_service" />
     </list>
     <recent_temporary>
       <list>
